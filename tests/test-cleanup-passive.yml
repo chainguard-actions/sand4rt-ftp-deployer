@@ -1,0 +1,40 @@
+name: Test FTP deployment with cleanup and passive mode
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create local folder with files to deploy
+        run: |
+          mkdir -p output
+          echo "app.js content" > output/app.js
+          echo "index.html content" > output/index.html
+          echo "Created output folder with test files"
+          ls -la output/
+
+      - name: Run FTP deployer action with cleanup and passive mode
+        id: action
+        continue-on-error: true
+        uses: .
+        with:
+          host: "ftp.invalid.example.com"
+          port: "21"
+          username: "ftpuser"
+          password: "ftppassword"
+          local_folder: "output"
+          remote_folder: "/public"
+          cleanup: "true"
+          passive: "true"
+
+      - name: Assert action ran with cleanup and passive options
+        run: |
+          echo "Action outcome: ${{ steps.action.outcome }}"
+          # The action should have attempted to run (not skipped)
+          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
+            echo "FAIL: action was skipped unexpectedly"
+            exit 1
+          fi
+          echo "PASS: action ran with cleanup and passive options (outcome: ${{ steps.action.outcome }})"

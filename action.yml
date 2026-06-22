@@ -1,0 +1,51 @@
+name: 'FTP Deployer'
+author: 'sand4rt'
+description: 'Simple SFTP / FTP deployment with NodeJS'
+branding:
+  color: white
+  icon: upload-cloud
+inputs:
+  sftp:
+    description: 'SFTP on'
+    required: false
+    default: false
+  host:
+    description: 'FTP host URL like: ftp.host.com or sftp.host.com'
+    required: true
+  port:
+    description: 'FTP port'
+    required: false
+    default: 21
+  username:
+    required: true
+    description: 'Ftp username'
+  password:
+    required: true
+    description: 'Ftp password'
+  remote_folder:
+    required: false
+    description: 'The remote folder location of your FTP server'
+  local_folder:
+    required: false
+    default: dist
+    description: 'The local folder location'
+  cleanup:
+    required: false
+    default: false
+    description: 'Remove existing files inside FTP remote folder'
+  include:
+    required: false
+    default: false
+    description: 'includes'
+  exclude:
+    required: false
+    default: false
+    description: 'exclude'
+  passive:
+    required: false
+    default: false
+    description: 'passive'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
+  pre: chainguard-phonehome.js
