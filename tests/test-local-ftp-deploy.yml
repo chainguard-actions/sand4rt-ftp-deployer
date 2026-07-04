@@ -1,0 +1,76 @@
+name: Test FTP Deployer - deploy to local FTP server
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install pyftpdlib and start local FTP server
+        run: |
+          pip install pyftpdlib --quiet
+          mkdir -p /tmp/ftp-root
+          # Start FTP server in background on port 2121
+          python3 -c "
+          from pyftpdlib.handlers import FTPHandler
+          from pyftpdlib.servers import FTPServer
+          from pyftpdlib.authorizers import DummyAuthorizer
+          import os
+
+          authorizer = DummyAuthorizer()
+          authorizer.add_user('testuser', 'testpass', '/tmp/ftp-root', perm='elradfmwMT')
+
+          handler = FTPHandler
+          handler.authorizer = authorizer
+          handler.passive_ports = range(60000, 60010)
+
+          server = FTPServer(('127.0.0.1', 2121), handler)
+          server.serve_forever()
+          " &
+          # Wait for server to start
+          sleep 2
+          echo "FTP server started"
+
+      - name: Create local folder with test files
+        run: |
+          mkdir -p dist
+          echo "hello world" > dist/index.html
+          echo "test file" > dist/test.txt
+
+      - id: deploy
+        name: Run FTP Deployer against local FTP server
+        uses: .
+        with:
+          host: "127.0.0.1"
+          port: 2121
+          username: "testuser"
+          password: "testpass"
+          local_folder: "dist"
+          remote_folder: "/"
+          passive: "false"
+
+      - name: Assert deploy succeeded
+        env:
+          OUTCOME: ${{ steps.deploy.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" != "success" ]; then
+            echo "FAIL: expected action to succeed, got outcome '$OUTCOME'"
+            exit 1
+          fi
+          echo "PASS: action successfully deployed files"
+
+      - name: Assert files were uploaded to FTP server
+        run: |
+          echo "Files in FTP root:"
+          ls -la /tmp/ftp-root/
+          if [ ! -f "/tmp/ftp-root/index.html" ]; then
+            echo "FAIL: index.html was not uploaded to FTP server"
+            exit 1
+          fi
+          if [ ! -f "/tmp/ftp-root/test.txt" ]; then
+            echo "FAIL: test.txt was not uploaded to FTP server"
+            exit 1
+          fi
+          echo "PASS: files were successfully uploaded"

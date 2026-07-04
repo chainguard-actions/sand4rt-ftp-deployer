@@ -1,0 +1,37 @@
+{
+  "name": "@sand4rt/ftp-deployer",
+  "version": "1.0.8",
+  "description": "Simple SFTP / FTP deployment with NodeJS",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "build": "ncc build index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sand4rt/ftp-deployer.git"
+  },
+  "keywords": [
+    "FTP",
+    "Github",
+    "Actions",
+    "Deploy"
+  ],
+  "author": "sand4rt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sand4rt/ftp-deployer/issues"
+  },
+  "homepage": "https://github.com/sand4rt/ftp-deployer#readme",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "ftp-deploy": "^2.4.7"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.36.0"
+  },
+  "overrides": {
+    "ssh2": "^1.16.0",
+    "@icetee/ftp": "1.0.8"
+  }
+}

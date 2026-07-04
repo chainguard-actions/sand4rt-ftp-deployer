@@ -1,14 +1,25 @@
-# sand4rt/ftp-deployer
+# GitHub action - SFTP / FTP deployer
 
-Simple SFTP / FTP deployment with NodeJS
+Simple SFTP / FTP deployment with NodeJS.
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/sand4rt/ftp-deployer](https://github.com/sand4rt/ftp-deployer).
+## Example
 
-## Versions
-
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v1.6 | [`v1.6`](https://github.com/chainguard-actions/sand4rt-ftp-deployer/tree/v1.6) | [`e4548d8`](https://github.com/sand4rt/ftp-deployer/commit/e4548d89adf56fdee2804abeaa7992d1953a1f0f) |
+``` yml
+- name: FTP Deployer
+  uses: sand4rt/ftp-deployer@v1.10
+  with:
+    sftp: false # optional
+    host: ${{ secrets.FTP_HOST }} # e.g. ftp.host.com or sftp.host.com (without ftp:// or ftps://)
+    port: 21 # optional, default is: 21
+    username: ${{ secrets.FTP_USERNAME }} # FTP username
+    password: ${{ secrets.FTP_PASSWORD }} # FTP password
+    remote_folder: ${{ secrets.FTP_REMOTE_FOLDER }} # optional, remote path of your FTP server
+    local_folder: dist # optional, local path, default is: dist
+    cleanup: false # optional, remove existing files inside FTP remote folder
+    include: '[]' # optional, e.g. '['dist']'
+    exclude: '[]' # optional, e.g. '['node_modules/**', '.git/**', '*.env']'
+    passive: true # optional
+```
 
 ## Privacy
 
