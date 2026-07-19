@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-# Hardening Report: sand4rt--ftp-deployer--/v1.10
+# Hardening Report: sand4rt--ftp-deployer/v1.10
 
 > This file was generated automatically by the hardening agent.
 
@@ -8,7 +8,7 @@
 
 **Test Policy SHA:** `843adf9e4b8f85d0c08b27b9d0b09dd094b54702`
 
-**Harden Agent Version:** `1`
+**Harden Agent Version:** `2`
 
-Action **sand4rt--ftp-deployer--/v1.10** was hardened automatically. 0 finding(s) were identified and resolved across 0 iteration(s).
+Action **sand4rt--ftp-deployer/v1.10** was hardened automatically. 0 finding(s) were identified and resolved across 0 iteration(s).
 
