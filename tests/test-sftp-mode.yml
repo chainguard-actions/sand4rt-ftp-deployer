@@ -1,4 +1,4 @@
-name: Test SFTP mode deployment
+name: Test SFTP mode (connection error path)
 on:
   workflow_dispatch:
 jobs:
@@ -7,34 +7,27 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Create custom local folder with files to deploy
+      - name: Create local folder with test files
         run: |
-          mkdir -p build
-          echo "<html><body>Test</body></html>" > build/index.html
-          echo "style.css content" > build/style.css
-          echo "Created build folder with test files"
-          ls -la build/
+          mkdir -p my-build
+          echo "<html>test</html>" > my-build/index.html
+          echo "body {}" > my-build/style.css
 
-      - name: Run FTP deployer action in SFTP mode (expect connection failure, not step failure)
+      - name: Run FTP deployer in SFTP mode (expects connection error, not crash)
         id: action
-        continue-on-error: true
+        # sftp: "true" is JSON.parse'd to boolean true in the action.
+        # The action uses core.error() not core.setFailed(), so exits 0
+        # even when the SFTP connection fails.
         uses: .
         with:
           sftp: "true"
-          host: "sftp.invalid.example.com"
-          port: "22"
-          username: "sftpuser"
-          password: "sftppassword"
-          local_folder: "build"
-          remote_folder: "/var/www/html"
-          cleanup: "false"
+          host: "127.0.0.1"
+          port: 22
+          username: "testuser"
+          password: "testpass"
+          local_folder: "my-build"
+          remote_folder: "/"
 
-      - name: Assert SFTP action ran
+      - name: Assert SFTP mode action completed without unhandled exception
         run: |
-          echo "Action outcome: ${{ steps.action.outcome }}"
-          # The action should have attempted to run (not skipped)
-          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
-            echo "FAIL: action was skipped unexpectedly"
-            exit 1
-          fi
-          echo "PASS: SFTP action ran (outcome: ${{ steps.action.outcome }})"
+          echo "PASS: SFTP mode action step completed (core.error used, not core.setFailed)"

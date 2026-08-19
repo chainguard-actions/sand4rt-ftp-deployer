@@ -1,4 +1,4 @@
-name: Test basic FTP deployment
+name: Test basic FTP deployment (connection error path)
 on:
   workflow_dispatch:
 jobs:
@@ -7,32 +7,26 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Create local folder with files to deploy
+      - name: Create local dist folder with a test file
         run: |
           mkdir -p dist
           echo "hello world" > dist/index.html
-          echo "Created dist folder with test files"
-          ls -la dist/
 
-      - name: Run FTP deployer action (expect connection failure, not step failure)
+      - name: Run FTP deployer action (expects connection error, not crash)
         id: action
-        continue-on-error: true
+        # The action uses core.error() not core.setFailed(), so it exits 0
+        # even when the FTP connection fails. We verify it doesn't throw
+        # an unhandled exception (which would exit non-zero).
         uses: .
         with:
-          host: "ftp.invalid.example.com"
+          host: "127.0.0.1"
+          port: 9999
           username: "testuser"
-          password: "testpassword"
+          password: "testpass"
           local_folder: "dist"
-          remote_folder: "/public_html"
+          remote_folder: "/upload"
           cleanup: "false"
 
-      - name: Assert action ran (connection error is expected with fake credentials)
+      - name: Assert action completed without unhandled exception
         run: |
-          echo "Action outcome: ${{ steps.action.outcome }}"
-          # The action uses core.error() not core.setFailed(), so it may succeed or fail
-          # Either way, the action should have attempted to run
-          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
-            echo "FAIL: action was skipped unexpectedly"
-            exit 1
-          fi
-          echo "PASS: action ran (outcome: ${{ steps.action.outcome }})"
+          echo "PASS: action step completed (core.error used, not core.setFailed)"

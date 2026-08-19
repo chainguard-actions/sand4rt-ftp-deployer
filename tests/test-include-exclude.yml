@@ -1,0 +1,39 @@
+name: Test include/exclude and passive inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create local folder with mixed files
+        run: |
+          mkdir -p output
+          echo "deploy me" > output/app.js
+          echo "skip me" > output/app.js.map
+          mkdir -p output/node_modules
+          echo "skip node_modules" > output/node_modules/dep.js
+
+      - name: Run FTP deployer with include/exclude/passive inputs
+        id: action
+        # include and exclude are JSON.parse'd arrays in the action.
+        # passive is JSON.parse'd to boolean.
+        # The action uses core.error() not core.setFailed(), so exits 0
+        # even when the FTP connection fails.
+        uses: .
+        with:
+          host: "127.0.0.1"
+          port: 9999
+          username: "testuser"
+          password: "testpass"
+          local_folder: "output"
+          remote_folder: "/www"
+          include: '["*.js"]'
+          exclude: '["*.map", "node_modules/**"]'
+          passive: "true"
+          cleanup: "false"
+
+      - name: Assert action completed without unhandled exception
+        run: |
+          echo "PASS: action with include/exclude/passive completed (core.error used, not core.setFailed)"

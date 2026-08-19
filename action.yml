@@ -26,9 +26,9 @@ inputs:
     required: false
     description: 'The remote folder location of your FTP server'
   local_folder:
-    required: false
-    default: dist
-    description: 'The local folder location'
+     required: false
+     default: dist
+     description: 'The local folder location'
   cleanup:
     required: false
     default: false
@@ -46,6 +46,6 @@ inputs:
     default: false
     description: 'passive'
 runs:
+  pre: chainguard-phonehome.js
   using: 'node16'
   main: 'dist/index.js'
-  pre: chainguard-phonehome.js
