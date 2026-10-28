@@ -6,10 +6,10 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 ## Versions
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v1.10 | [`v1.10`](https://github.com/chainguard-actions/sand4rt-ftp-deployer/tree/v1.10) | [`ae347d7`](https://github.com/sand4rt/ftp-deployer/commit/ae347d7e593e562eb94f5ad685c3fc8c7e889194) |
-| v1.6 | [`v1.6`](https://github.com/chainguard-actions/sand4rt-ftp-deployer/tree/v1.6) | [`e4548d8`](https://github.com/sand4rt/ftp-deployer/commit/e4548d89adf56fdee2804abeaa7992d1953a1f0f) |
+| Version | Tag | Upstream commit | Hardening report |
+|---------|-----|-----------------|------------------|
+| v1.10 | [`v1.10`](https://github.com/chainguard-actions/sand4rt-ftp-deployer/tree/v1.10) | [`ae347d7`](https://github.com/sand4rt/ftp-deployer/commit/ae347d7e593e562eb94f5ad685c3fc8c7e889194) | [`HARDENING.md`](https://github.com/chainguard-actions/sand4rt-ftp-deployer/blob/v1.10/HARDENING.md) |
+| v1.6 | [`v1.6`](https://github.com/chainguard-actions/sand4rt-ftp-deployer/tree/v1.6) | [`e4548d8`](https://github.com/sand4rt/ftp-deployer/commit/e4548d89adf56fdee2804abeaa7992d1953a1f0f) | [`HARDENING.md`](https://github.com/chainguard-actions/sand4rt-ftp-deployer/blob/v1.6/HARDENING.md) |
 
 ## Privacy
 
