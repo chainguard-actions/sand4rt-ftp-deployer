@@ -4,8 +4,13 @@
   "version": "v1.10",
   "commit_sha": "ae347d7e593e562eb94f5ad685c3fc8c7e889194",
   "url": "https://github.com/sand4rt/ftp-deployer",
-  "policy_sha": "d636be7e43ef829af6e853da6b3c7566db9f72fe",
+  "policy_sha": "374911c4be584df24e6da57af2d990570ef0f859",
   "test_policy_sha": "843adf9e4b8f85d0c08b27b9d0b09dd094b54702",
   "test_agent_version": "2",
-  "harden_agent_version": "2"
+  "harden_agent_version": "2",
+  "dist_artifact": {
+    "gcs_uri": "gs://patch-actions-node-artifacts/dist-artifacts/sand4rt/ftp-deployer/v1.10/sha256-a621175f54647ad55708ca8ba03868f520b35fcb31601d3dcd852e39b6f19585.tar.gz",
+    "sha256": "a621175f54647ad55708ca8ba03868f520b35fcb31601d3dcd852e39b6f19585",
+    "size_bytes": 444938
+  }
 }
